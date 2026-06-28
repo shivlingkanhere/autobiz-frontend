@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/lib/auth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 import NotFound from "@/pages/not-found";
@@ -37,27 +38,48 @@ function Router() {
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/admin/login" component={AdminLogin} />
 
+      {/* Protected App Routes */}
       <Route path="/dashboard">
-        <ProtectedRoute><Dashboard /></ProtectedRoute>
-      </Route>
-      <Route path="/business">
-        <ProtectedRoute><BusinessProfile /></ProtectedRoute>
-      </Route>
-      <Route path="/assistant">
-        <ProtectedRoute><AssistantConfig /></ProtectedRoute>
-      </Route>
-      <Route path="/chat">
-        <ProtectedRoute><ChatTest /></ProtectedRoute>
-      </Route>
-      <Route path="/chat-history">
-        <ProtectedRoute><ChatHistory /></ProtectedRoute>
-      </Route>
-      <Route path="/settings">
-        <ProtectedRoute><Settings /></ProtectedRoute>
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
       </Route>
 
+      <Route path="/business">
+        <ProtectedRoute>
+          <BusinessProfile />
+        </ProtectedRoute>
+      </Route>
+
+      <Route path="/assistant">
+        <ProtectedRoute>
+          <AssistantConfig />
+        </ProtectedRoute>
+      </Route>
+
+      <Route path="/chat">
+        <ProtectedRoute>
+          <ChatTest />
+        </ProtectedRoute>
+      </Route>
+
+      <Route path="/chat-history">
+        <ProtectedRoute>
+          <ChatHistory />
+        </ProtectedRoute>
+      </Route>
+
+      <Route path="/settings">
+        <ProtectedRoute>
+          <Settings />
+        </ProtectedRoute>
+      </Route>
+
+      {/* Protected Admin Routes */}
       <Route path="/admin">
-        <ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>
+        <ProtectedRoute requireAdmin>
+          <AdminDashboard />
+        </ProtectedRoute>
       </Route>
 
       <Route component={NotFound} />
@@ -69,12 +91,14 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="autobiz-theme">
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-            <Router />
-          </WouterRouter>
-          <Toaster richColors position="top-right" />
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+              <Router />
+            </WouterRouter>
+            <Toaster richColors position="top-right" />
+          </TooltipProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );
