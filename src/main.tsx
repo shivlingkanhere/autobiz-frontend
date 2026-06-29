@@ -10,6 +10,7 @@ import { setBaseUrl } from "@workspace/api-client-react";
 const queryClient = new QueryClient();
 
 // IMPORTANT: API BASE URL SET
+console.log("API URL =", import.meta.env.VITE_API_URL);
 setBaseUrl(import.meta.env.VITE_API_URL);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
